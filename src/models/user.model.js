@@ -4,7 +4,7 @@ import bcrypt from "bcrypt"
 const userSchema = new Schema({
     username: {
         type: String,
-        requried: true,
+        required: true,
         unique: true,
         lowercase: true,
         trim: true,
@@ -12,14 +12,14 @@ const userSchema = new Schema({
     },
         email: {
             type: String,
-            requried: true,
+            required: true,
             unique: true,
             lowercase: true,
             trim: true,
     },
     fullName: {
         type: String,
-        requried: true,
+        required: true,
         trim: true,
         index: true,
     },
@@ -49,7 +49,7 @@ const userSchema = new Schema({
 )
 
 userSchema.pre("save", function (next) {
-    if(! this.ismodiified("password")) return next()
+    if(! this.isModified("password")) return next()
     this.password = bcrypt.hash(this.password, 10)
     next()
 })
@@ -70,13 +70,13 @@ userSchema.methods.generateAccessToken = function () {
         }
     )
 }
-userSchema.methods.generateAccessToken = function () {
+userSchema.methods.generateRefreshToken = function () {
     jwt.sign({
         _id: this._id,
     },
         process.env.REFRESH_TOKEN_SECRET,
         {
-            expiresIn: process.env.REFRESH_TOKEN_ECPIRY 
+            expiresIn: process.env.REFRESH_TOKEN_EXPIRY 
         }
     )
 }
